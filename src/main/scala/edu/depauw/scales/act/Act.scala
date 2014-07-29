@@ -99,8 +99,8 @@ case class ParallelAct(one: Performance, two: Performance) extends Performance {
 
 	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
 		val ctx = Canvas.ctx
-    val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
-    ParallelAct(one.scale(scaleFactor), two.scale(scaleFactor)).act()
+		val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
+		ParallelAct(one.scale(scaleFactor), two.scale(scaleFactor)).act()
 	}
 
 	def scale(x: Double): Performance = {
@@ -132,8 +132,8 @@ case class SequentialAct(first: Performance, second: Performance) extends Perfor
 
 	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
 		val ctx = Canvas.ctx
-    val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
-    SequentialAct(first.scale(scaleFactor), second.scale(scaleFactor)).act()
+		val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
+		SequentialAct(first.scale(scaleFactor), second.scale(scaleFactor)).act()
 	}
 
 	def scale(x: Double): Performance = {

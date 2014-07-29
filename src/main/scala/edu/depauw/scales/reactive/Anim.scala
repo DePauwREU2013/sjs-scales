@@ -97,15 +97,6 @@ case class Anim[T](width: Double, height: Double)(reaction: Reactive, fn: T => S
 	def translate(dx: Double, dy: Double): Scales =
 	  Anim[T](width, height)(reaction, t => fn(t).translate(dx, dy))
 
-/**
-  def translate(dx: Double, dy: Double): Graphic =
-    transform(AffineTransform.getTranslateInstance(dx, dy))
-
-	  def scale(s: Double): Graphic =
-    transform(AffineTransform.getScaleInstance(s, s))
-
-    def transform(xform: AffineTransform): Graphic = Transformed(this, xform)
-*/
 	def scale(x: Double) = 
 		Anim[T](width, height)(reaction, t => fn(t).scale(x))
 
