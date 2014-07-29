@@ -10,14 +10,14 @@ trait Graphic extends Scales {
 
   //added 
   def act(time: Double = 0): Unit = {
-    Anim(Reactive.ClockTickChanges(1,1), (x: Double) => { this } ).act(time)
+    Anim(bounds.width, bounds.height)(Reactive.ClockTickChanges(1,1), (x: Double) => { this } ).act(time)
   } 
 
   //added
   def duration: Double = 0
 
   //added
-  def transformAct(s: Double): Graphic = scale(s)
+  def transformAct(s: Double): Graphic = this
 
   def bounds: Bounds
 

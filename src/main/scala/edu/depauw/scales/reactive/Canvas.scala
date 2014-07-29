@@ -9,13 +9,8 @@ import edu.depauw.scales.graphics._
 import Base._
 
 object Canvas {
-  val canvas = dom.document.createElement("canvas").asInstanceOf[dom.HTMLCanvasElement]
-  canvas.width = 750
-  canvas.height = 500
+  val canvas = dom.document.getElementById("output").asInstanceOf[dom.HTMLCanvasElement]
   val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
-
-  val playground = dom.document.getElementById("playground")
-  playground.appendChild(canvas)
 }
 
 object CanvasHandler {

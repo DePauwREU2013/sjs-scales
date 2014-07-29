@@ -15,19 +15,35 @@ import Reactive._
 trait Scales {
 	def act(time: Double = 0): Unit
 	def duration: Double	
+	def bounds: Bounds
+	def translate(dx: Double, dy: Double): Scales
 	def transformAct(scale: Double): Scales
 }
 
 trait Performance {
-	def act(t: Double = 0): Unit
+	def act(): Unit
 
 	def on(that: Performance): ParallelAct = ParallelAct(this, that)
 
+  def beside(that: Performance): Performance = {
+    val dx = bounds.right - that.bounds.left
+    on(that.translate(dx, 0))
+  }
+
+  def above(that: Performance): Performance = {
+    val dy = bounds.bottom - that.bounds.top
+    on(that.translate(0, dy))
+  }
+  
+  def translate(dx: Double, dy: Double): Performance
+  
 	def seq(that: Performance): SequentialAct = SequentialAct(this, that)
 
 	def transform(scale: Double): Performance
 
 	def length: Double //in seconds
+	
+	def bounds: Bounds
 }
 
 /*
@@ -36,50 +52,59 @@ trait Performance {
 ** Performance handles Scales
 */
 case class Act(scales: Scales) extends Performance {
-
 	def length = scales.duration
 
-	def act(t: Double = 0): Unit = {
-		dom.setTimeout(() => scales.act(0), t * 1000)
+	def act(): Unit = {
+		scales.act(0)
 	}
+	
+	def translate(dx: Double, dy: Double): Performance =
+	  Act(scales.translate(dx, dy))
 
 	def transform(scale: Double): Performance = {
 		Act(scales.transformAct(scale))
 	}
 
+	def bounds = scales.bounds
 }
 
 case class ParallelAct(one: Performance, two: Performance) extends Performance {
 	def length = math.max(one.length, two.length)
 
-	def act(t: Double = 0): Unit = {
-		dom.setTimeout(() => {
-			one.act(0)
-			two.act(0)
-		}, t * 1000)
+	def act(): Unit = {
+		one.act()
+	  two.act()
 	}
 
+	def translate(dx: Double, dy: Double): Performance =
+	  ParallelAct(one.translate(dx, dy), two.translate(dx, dy))
+	  
 	def transform(scale: Double): Performance = {
 		ParallelAct(one.transform(scale), two.transform(scale))
 	}
+	
+	def bounds = one.bounds union two.bounds
 }
 
 case class SequentialAct(first: Performance, second: Performance) extends Performance {
 	def length = first.length + second.length
 
-	def act(t: Double = 0): Unit = {
-		dom.setTimeout(() => {
-			first.act(0)
-		}, t * 1000)
+	def act(): Unit = {
+		first.act()
 
-		val waitDuration = t + first.length
+		val waitDuration = first.length
 		dom.setTimeout(() => {
-			second.act(0)
+			second.act()
 		}, waitDuration * 1000)
 
 	}
 
+	def translate(dx: Double, dy: Double): Performance =
+	  SequentialAct(first.translate(dx, dy), second.translate(dx, dy))
+	  
 	def transform(scale: Double): Performance = {
 		SequentialAct(first.transform(scale), second.transform(scale))
 	}
+	
+	def bounds = first.bounds union second.bounds
 }

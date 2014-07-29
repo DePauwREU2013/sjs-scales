@@ -4,8 +4,8 @@ import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
 import rx._
-
 import edu.depauw.scales.act._
+import edu.depauw.scales.graphics.EmptyBounds
 
 object Audio {
 	val audioContext = js.Dynamic.newInstance(js.Dynamic.global.AudioContext)()
@@ -29,6 +29,10 @@ trait ScalesNote extends Scales {
 	def act(time: Double = 0): Unit
 
 	def transformAct(scale: Double): ScalesNote
+
+	def bounds = EmptyBounds
+	
+	def translate(dx: Double, dy: Double) = this
 }
 
 /*
@@ -55,7 +59,7 @@ case class Note(freq: Double, dur: Double = 1, vol: Double = 1) extends ScalesNo
 		o.start(ctx.currentTime.toString().toDouble + time)
 		o.stop(ctx.currentTime.toString().toDouble + time + dur)
 	}
-
+	
 	def transformAct(scale: Double): ScalesNote = {
 		Note(freq, dur * scale, vol)
 	}

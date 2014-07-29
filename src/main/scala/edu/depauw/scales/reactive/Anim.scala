@@ -72,10 +72,9 @@ object Reactive {
 ** Usage example: Anim(Reactive.ClockTick(2, 10), fn)
 ** @params reaction: a final val from Reactive, such as Reactive.MouseClickGetClockTime
 */
-case class Anim[T](reaction: Reactive, fn: T => Scales) extends Scales {
+case class Anim[T](width: Double, height: Double)(reaction: Reactive, fn: T => Scales) extends Scales {
 	
-	//added - bounds for anim
-	//def bounds = RectBounds(l, r, )
+	def bounds = RectBounds(0, width, 0, height)
 	
 	//added
 	def duration: Double = reaction match {
@@ -87,13 +86,16 @@ case class Anim[T](reaction: Reactive, fn: T => Scales) extends Scales {
 
 	def transformAct(scale: Double): Anim[T] = reaction match {
 		case x: CTick => 
-			Anim(CTick(x.fps, x.dur * scale), fn)
+			Anim(width, height)(CTick(x.fps, x.dur * scale), fn)
 		case x: CTickGetMPos =>
-			Anim(CTickGetMPos(x.fps, x.dur * scale), fn)
+			Anim(width, height)(CTickGetMPos(x.fps, x.dur * scale), fn)
 		case x: CTickChanges => 
-			Anim(CTickChanges(x.fps, x.dur * scale), fn)
+			Anim(width, height)(CTickChanges(x.fps, x.dur * scale), fn)
 		case _ => this 
 	}
+	
+	def translate(dx: Double, dy: Double): Scales =
+	  Anim[T](width, height)(reaction, t => fn(t).translate(dx, dy))
 
 	lazy val function = fn.asInstanceOf[(Any => Scales)]
 
