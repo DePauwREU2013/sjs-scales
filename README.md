@@ -1,9 +1,7 @@
-# Example Scales application written in Scala.js
+# Scales graphics and reactive library for Scala.js
 
-This is a barebones example of an application written in
-[Scala.js](http://www.scala-js.org/).
-It has been hijacked as a test harness for developing a Scala-JS version of
-the Scales library. It will go away fairly soon.
+This is the Scales library for functional graphics, music, and reactive animation,
+built with [Scala.js](http://www.scala-js.org/).
 
-Compile with `~ ;fastOptJS ;test:fastOptJS` in `sbt`, then open
-`index-fastopt.html` (and `testsuite-fastopt.html` for test results).
+Compile with `compile; publishLocal` in `sbt`; this will put the appropriate packages
+in your local ivy cache. (Eventually it will be published to a real repository...)
