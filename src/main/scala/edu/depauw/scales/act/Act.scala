@@ -17,6 +17,7 @@ trait Scales {
 	def duration: Double	
 	def bounds: Bounds
 	def translate(dx: Double, dy: Double): Scales
+	def scale(x: Double): Scales //added
 	def transformAct(scale: Double): Scales
 }
 
@@ -36,14 +37,21 @@ trait Performance {
   }
   
   def translate(dx: Double, dy: Double): Performance
+
+  //added
+	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit
+
+	//added
+	def scale(x: Double): Performance
   
 	def seq(that: Performance): SequentialAct = SequentialAct(this, that)
 
 	def transform(scale: Double): Performance
 
-	def length: Double //in seconds
+	def length: Double
 	
 	def bounds: Bounds
+
 }
 
 /*
@@ -60,6 +68,16 @@ case class Act(scales: Scales) extends Performance {
 	
 	def translate(dx: Double, dy: Double): Performance =
 	  Act(scales.translate(dx, dy))
+
+	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
+		val ctx = Canvas.ctx
+    val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
+    this.scale(scaleFactor).act()
+	}
+
+	def scale(x: Double): Performance = {
+		Act(scales.scale(x))
+	}
 
 	def transform(scale: Double): Performance = {
 		Act(scales.transformAct(scale))
@@ -78,11 +96,21 @@ case class ParallelAct(one: Performance, two: Performance) extends Performance {
 
 	def translate(dx: Double, dy: Double): Performance =
 	  ParallelAct(one.translate(dx, dy), two.translate(dx, dy))
+
+	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
+		val ctx = Canvas.ctx
+    val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
+    ParallelAct(one.scale(scaleFactor), two.scale(scaleFactor)).act()
+	}
+
+	def scale(x: Double): Performance = {
+		ParallelAct(one.scale(x), two.scale(x))
+	}
 	  
 	def transform(scale: Double): Performance = {
 		ParallelAct(one.transform(scale), two.transform(scale))
 	}
-	
+
 	def bounds = one.bounds union two.bounds
 }
 
@@ -101,10 +129,20 @@ case class SequentialAct(first: Performance, second: Performance) extends Perfor
 
 	def translate(dx: Double, dy: Double): Performance =
 	  SequentialAct(first.translate(dx, dy), second.translate(dx, dy))
+
+	def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
+		val ctx = Canvas.ctx
+    val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
+    SequentialAct(first.scale(scaleFactor), second.scale(scaleFactor)).act()
+	}
+
+	def scale(x: Double): Performance = {
+		SequentialAct(first.scale(x), second.scale(x))
+	}
 	  
 	def transform(scale: Double): Performance = {
 		SequentialAct(first.transform(scale), second.transform(scale))
 	}
-	
+
 	def bounds = first.bounds union second.bounds
 }

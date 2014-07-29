@@ -33,6 +33,8 @@ trait ScalesNote extends Scales {
 	def bounds = EmptyBounds
 	
 	def translate(dx: Double, dy: Double) = this
+
+	def scale(x: Double) = this
 }
 
 /*

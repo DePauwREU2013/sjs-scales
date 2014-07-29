@@ -84,7 +84,7 @@ trait Graphic extends Scales {
     (box on axes).fill(Color.Clear).stroke(Color.Black).strokeWidth(1) on this
   }
   
-  def displayOn(canvas: dom.HTMLCanvasElement): Unit = {
+  def displayOn(canvas: dom.HTMLCanvasElement = Canvas.canvas): Unit = {
     val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
     val scaleFactor = (canvas.width / bounds.width) min (canvas.height / bounds.height)
     this.tl.scale(scaleFactor).render(ctx)
