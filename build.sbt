@@ -3,9 +3,11 @@ scalaJSSettings
 
 organization := "edu.depauw"
 
-name := "SJS-Scales"
+description := "Scala.js library for functional reactive graphics and music"
 
-version := "0.1-SNAPSHOT"
+name := "sjs-scales"
+
+version := "0.1"
 
 scalaVersion := "2.11.1"
 
@@ -21,3 +23,26 @@ seq(bintrayPublishSettings:_*)
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
+pomExtra := (
+  <scm>
+    <url>git@github.com:DePauwREU2013/sjs-scales.git</url>
+    <connection>scm:git:git@github.com:DePauwREU2013/sjs-scales.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>bhoward</id>
+      <name>Brian Howard</name>
+      <url>https://github.com/bhoward</url>
+    </developer>
+    <developer>
+      <id>bekroogle</id>
+      <name>Benjamin Kruger</name>
+      <url>https://github.com/bekroogle</url>
+    </developer>
+    <developer>
+      <id>namchid</id>
+      <name>Namchi Do</name>
+      <url>https://github.com/namchid</url>
+    </developer>
+  </developers>
+)
