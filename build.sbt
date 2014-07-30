@@ -16,3 +16,8 @@ libraryDependencies ++= Seq(
     "com.scalarx" %%% "scalarx" % "0.2.5",
     "org.scala-lang.modules.scalajs" %% "scalajs-jasmine-test-framework" % scalaJSVersion % "test"
 )
+
+seq(bintrayPublishSettings:_*)
+
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+
